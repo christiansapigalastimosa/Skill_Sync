@@ -18,8 +18,13 @@ const styles = StyleSheet.create({
     paddingTop: 30,
   },
   title: {
-    fontSize: 24,
+    fontSize: 30,
     textAlign: 'center',
     marginBottom: 30,
+    backgroundColor: '#c00cf7ff',
+    padding: 50,
+    marginLeft: 100,
+    marginRight: 100,
+    
   },
 })

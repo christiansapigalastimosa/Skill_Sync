@@ -5,9 +5,9 @@ const Home = () => {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>
-        M Y  G O A L  S - K - I - L - L S - Y - N - C 
-
+        M Y  G O A L 
       </Text>
+       <Text style={styles.title1}> S - K - I - L - L S - Y - N - C</Text>
       <Link style={styles.link} href="/goals">
         View Your Goals
       </Link>
@@ -21,15 +21,24 @@ const Home = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center'
+    alignItems: 'center',
+    backgroundColor: "lightblue",
   },
   title: {
-    marginVertical: 40,
+    marginVertical: 15,
     fontSize: 28,
+    color: '#c00cf7ff',
+    fontWeight: "500",
+    
+  },
+  title1: {
+    marginVertical: 15,
+    fontSize: 24,
+    color: '#c00cf7ff',
   },
   link: {
     marginVertical: 20,
-    padding: 16,
+    padding: 18,
     backgroundColor: '#c00cf7ff',
     color: 'white',
     borderRadius: 8,
