@@ -1,31 +1,29 @@
-import { addDoc, collection } from "firebase/firestore"
-import { createContext, useState } from "react"
-import { db } from "../firebaseConfig"
+import { createContext, useState, useEffect } from "react";
+import { db } from "../firebaseConfig";
+import { collection, addDoc, deleteDoc, doc, updateDoc, onSnapshot } from "firebase/firestore";
 
-export const GoalsContext = createContext()
+export const GoalsContext = createContext();
 
-export function GoalsProvider({ children }) {
-  const [goals, setGoals] = useState([])
+export const GoalsProvider = ({ children }) => {
+  const [goals, setGoals] = useState([]);
 
-  async function fetchGoals() {
-  }
- 
-  async function createGoal(goalData) {
-    // console.log(goalData)
-    await addDoc(collection(db, 'goals'), goalData)
-  }
+  useEffect(() => {
+    const goalsCollection = collection(db, "goals");
+    const unsubscribe = onSnapshot(
+      goalsCollection,
+      snapshot => setGoals(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }))),
+      error => console.error(error)
+    );
+    return () => unsubscribe();
+  }, []);
 
-  async function deleteGoal() {
-  }
-
-  async function updateGoal() {
-  }
+  const createGoal = async newGoal => { await addDoc(collection(db, "goals"), newGoal); };
+  const updateGoal = async (id, updatedFields) => { await updateDoc(doc(db, "goals", id), updatedFields); };
+  const deleteGoal = async id => { await deleteDoc(doc(db, "goals", id)); };
 
   return (
-    <GoalsContext.Provider
-      value={{ goals, fetchGoals, createGoal, deleteGoal, updateGoal }}
-    >
+    <GoalsContext.Provider value={{ goals, createGoal, updateGoal, deleteGoal }}>
       {children}
     </GoalsContext.Provider>
-  )
-}
+  );
+};

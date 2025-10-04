@@ -1,5 +1,10 @@
+// firebaseConfig.js
+// Required polyfills for Firebase in Expo (do this before importing firebase SDK modules)
+import 'react-native-get-random-values';
+import 'react-native-url-polyfill/auto';
 
-import { initializeApp } from "firebase/app";
+import { initializeApp, getApps, getApp } from "firebase/app";
+import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
@@ -8,9 +13,11 @@ const firebaseConfig = {
   projectId: "goalproject-csl",
   storageBucket: "goalproject-csl.firebasestorage.app",
   messagingSenderId: "301384366399",
-  appId: "1:301384366399:web:dbb50bcfc22dc916643b8a"
+  appId: "1:301384366399:web:dbb50bcfc22dc9166438a"
 };
 
+// initialize app (avoid duplicate initialization)
+const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
 
-const app = initializeApp(firebaseConfig);
-export const db = getFirestore(app)
+export const auth = getAuth(app);
+export const db = getFirestore(app);
