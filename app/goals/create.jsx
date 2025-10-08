@@ -1,7 +1,20 @@
-import { useState } from "react";
-import { View, Text, TextInput, Pressable, StyleSheet, Alert } from "react-native";
+import React, { useState } from "react";
+import {
+  View,
+  Text,
+  TextInput,
+  Pressable,
+  StyleSheet,
+  Alert,
+  ImageBackground,
+  Dimensions,
+} from "react-native";
+import { LinearGradient } from "expo-linear-gradient";
+import Animated, { FadeInDown } from "react-native-reanimated";
 import { useGoals } from "../../hooks/useGoals";
 import { useRouter } from "expo-router";
+
+const { width, height } = Dimensions.get("window");
 
 export default function CreateGoal() {
   const [title, setTitle] = useState("");
@@ -9,88 +22,129 @@ export default function CreateGoal() {
   const router = useRouter();
 
   const handleAdd = async () => {
-    if (!title.trim()) return alert("Goal cannot be empty!");
+    if (!title.trim())
+      return Alert.alert("⚠️ Required", "Please enter a goal first.");
     await createGoal(title);
-
-    // ✅ Success feedback
-    Alert.alert("🎯 Goal Added!", "Your new goal has been successfully saved.", [
-      {
-        text: "OK",
-        onPress: () => router.push("/goals"), // Go to goals after closing alert
-      },
+    Alert.alert("🎯 Success", "Your goal has been added!", [
+      { text: "OK", onPress: () => router.push("/goals") },
     ]);
-
-    setTitle(""); // clear input
+    setTitle("");
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>➕ Add New Goal</Text>
-
-      <TextInput
-        placeholder="Enter goal..."
-        placeholderTextColor="#888"
-        style={styles.input}
-        value={title}
-        onChangeText={setTitle}
+    <ImageBackground
+      source={require("../../assets/images/bg.jpg")}
+      style={styles.bg}
+      resizeMode="cover"
+    >
+      <LinearGradient
+        colors={["rgba(0,0,0,0.85)", "rgba(0,15,30,0.9)"]}
+        style={styles.overlay}
       />
 
-      <Pressable style={styles.button} onPress={handleAdd}>
-        <Text style={styles.buttonText}>✅ Save Goal</Text>
-      </Pressable>
+      <View style={styles.container}>
+        <Animated.View entering={FadeInDown.delay(100).duration(800)}>
+          <Text style={styles.title}>🎯 Create a New Goal</Text>
+        </Animated.View>
 
-      <Pressable style={styles.homeButton} onPress={() => router.push("/goals")}>
-        <Text style={styles.homeButtonText}>📋 See your Goals</Text>
-      </Pressable>
-    </View>
+        <Animated.View entering={FadeInDown.delay(300).duration(800)}>
+          <TextInput
+            placeholder="Type your goal here..."
+            placeholderTextColor="#00fff7"
+            style={styles.input}
+            value={title}
+            onChangeText={setTitle}
+          />
+        </Animated.View>
+
+        <Animated.View entering={FadeInDown.delay(500).duration(800)}>
+          <Pressable style={styles.button} onPress={handleAdd}>
+            <LinearGradient
+              colors={["#00fff7", "#00b8a9"]}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 1 }}
+              style={styles.buttonGradient}
+            >
+              <Text style={styles.buttonText}>✅ Save Goal</Text>
+            </LinearGradient>
+          </Pressable>
+        </Animated.View>
+
+        <Animated.View entering={FadeInDown.delay(700).duration(800)}>
+          <Pressable
+            style={styles.secondaryButton}
+            onPress={() => router.push("/goals")}
+          >
+            <Text style={styles.secondaryText}>📋 View My Goals</Text>
+          </Pressable>
+        </Animated.View>
+      </View>
+    </ImageBackground>
   );
 }
 
 const styles = StyleSheet.create({
+  bg: {
+    width,
+    height,
+    flex: 1,
+  },
+  overlay: {
+    ...StyleSheet.absoluteFillObject,
+  },
   container: {
     flex: 1,
-    backgroundColor: "#0d0d0d",
     justifyContent: "center",
-    padding: 20,
+    padding: 24,
   },
   title: {
-    fontSize: 22,
-    fontWeight: "bold",
-    color: "#ff00ff",
-    marginBottom: 20,
+    fontSize: 28,
+    fontWeight: "800",
+    color: "#00fff7",
     textAlign: "center",
+    marginBottom: 24,
+    textShadowColor: "#00fff7",
+    textShadowRadius: 12,
+    letterSpacing: 1,
   },
   input: {
-    borderColor: "#ff00ff",
     borderWidth: 1,
-    borderRadius: 10,
-    padding: 12,
-    marginBottom: 15,
-    color: "#fff",
+    borderColor: "rgba(0,255,247,0.6)",
+    borderRadius: 14,
+    padding: 14,
+    fontSize: 16,
+    color: "#eaffff",
+    marginBottom: 20,
+    backgroundColor: "rgba(255,255,255,0.07)",
   },
   button: {
-    backgroundColor: "rgba(255,0,255,0.1)",
-    borderColor: "#ff00ff",
-    borderWidth: 1,
-    padding: 15,
-    borderRadius: 12,
+    borderRadius: 14,
+    overflow: "hidden",
+  },
+  buttonGradient: {
+    paddingVertical: 14,
+    alignItems: "center",
+    borderRadius: 14,
   },
   buttonText: {
-    color: "#ff00ff",
-    textAlign: "center",
+    color: "#001a1a",
     fontWeight: "bold",
+    fontSize: 16,
+    textTransform: "uppercase",
+    letterSpacing: 1,
   },
-  homeButton: {
-    marginTop: 15,
-    backgroundColor: "rgba(255,0,255,0.2)",
-    borderColor: "#ff00ff",
+  secondaryButton: {
+    marginTop: 20,
+    borderColor: "#00fff7",
     borderWidth: 1,
-    padding: 15,
-    borderRadius: 12,
+    paddingVertical: 12,
+    borderRadius: 14,
+    backgroundColor: "rgba(0,255,247,0.08)",
   },
-  homeButtonText: {
-    color: "#ff00ff",
+  secondaryText: {
+    color: "#00fff7",
     textAlign: "center",
-    fontWeight: "bold",
+    fontWeight: "600",
+    fontSize: 15,
   },
 });
