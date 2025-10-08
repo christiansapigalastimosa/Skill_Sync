@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "my-goals",
-    "slug": "my-goals",
+    "name": "SkillSync",
+    "slug": "SkillSync",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/logo.png",
@@ -13,7 +13,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/adaptive-icon.png",
+        "foregroundImage": "./assets/images/logo.png",
         "backgroundColor": "#ffffff"
       },
       "package": "com.chrissapiga123.mygoals"
